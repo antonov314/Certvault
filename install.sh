@@ -7,7 +7,10 @@ echo "----------------------------------------"
 # Controleer of Python 3.10 of hoger is geïnstalleerd
 if command -v python3 >/dev/null 2>&1; then
     python_version=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
-    if (( $(echo "$python_version >= 3.10" | bc -l) )); then
+    major_version=$(echo $python_version | cut -d. -f1)
+    minor_version=$(echo $python_version | cut -d. -f2)
+    
+    if [ "$major_version" -ge 3 ] && [ "$minor_version" -ge 10 ]; then
         echo "✓ Python $python_version gevonden"
     else
         echo "✗ Python 3.10 of hoger is vereist (gevonden: $python_version)"
