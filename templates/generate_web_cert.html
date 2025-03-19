@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genereer Web Certificaat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="card-title mb-0">Genereer Web Certificaat voor {{ domain }}</h1>
+                    <a href="{{ url_for('domain_certificates', domain=domain) }}" class="btn btn-secondary">Terug</a>
+                </div>
+                
+                <form action="{{ url_for('generate_web_cert', domain=domain) }}" method="POST">
+                    <div class="mb-3">
+                        <label for="domain" class="form-label">Domeinnaam</label>
+                        <input type="text" class="form-control" id="domain" name="domain" required>
+                        <div class="form-text">Bijvoorbeeld: "example.com"</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="organization" class="form-label">Organisatie</label>
+                        <input type="text" class="form-control" id="organization" name="organization" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Land (2-letter code)</label>
+                        <input type="text" class="form-control" id="country" name="country" maxlength="2" required>
+                        <div class="form-text">Bijvoorbeeld: "NL"</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Wachtwoord voor .p12/.pfx bestanden</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="password" name="password" 
+                                   placeholder="Laat leeg voor automatisch genereren">
+                            <button type="button" class="btn btn-secondary" onclick="generatePassword()">
+                                Genereer wachtwoord
+                            </button>
+                        </div>
+                        <div class="form-text">Dit wachtwoord wordt gebruikt voor de .p12 en .pfx bestanden.</div>
+                    </div>
+                    <div class="alert alert-info">
+                        <h5>Belangrijke informatie:</h5>
+                        <ul class="mb-0">
+                            <li>Dit certificaat is geldig voor 1 jaar</li>
+                            <li>Het wordt ondertekend door uw Intermediate certificaat</li>
+                            <li>Het kan worden gebruikt voor HTTPS websites</li>
+                            <li>Bewaar de private key veilig en maak een backup</li>
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Genereer Web Certificaat</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function generatePassword() {
+        fetch('/generate_password')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('password').value = data.password;
+            });
+    }
+    </script>
+</body>
+</html> 

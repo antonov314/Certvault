@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2>SSL Certificaat Generator</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Bestaande Domeinen</h4>
+                    {% if domains %}
+                        <div class="list-group">
+                            {% for domain in domains %}
+                                <a href="{{ url_for('domain_certificates', domain=domain) }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-globe"></i> {{ domain }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">Nog geen domeinen toegevoegd.</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h4>Nieuw Domein Toevoegen</h4>
+                    <form method="POST" action="{{ url_for('add_domain') }}">
+                        <div class="mb-3">
+                            <label for="domain" class="form-label">Domein Naam</label>
+                            <input type="text" class="form-control" id="domain" name="domain" required>
+                            <div class="form-text">Bijvoorbeeld: example.com</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Domein Toevoegen
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

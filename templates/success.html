@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2>Certificaat Succesvol gegenereerd voor {{ domain }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success">
+                <h4 class="alert-heading">Succes!</h4>
+                <p>Het certificaat is succesvol gegenereerd voor {{ domain }}.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Download Opties</h4>
+                    <div class="list-group">
+                        <a href="{{ url_for('download_file', filename=cert_path) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-download"></i> Download Certificaat (.crt)
+                        </a>
+                        <a href="{{ url_for('download_file', filename=key_path) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-key"></i> Download Private Key (.key)
+                        </a>
+                        <a href="{{ url_for('download_file', filename=pem_path) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-alt"></i> Download PEM Formaat
+                        </a>
+                        <a href="{{ url_for('download_file', filename=der_path) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-code"></i> Download DER Formaat
+                        </a>
+                        <a href="{{ url_for('download_file', filename=p12_path) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-archive"></i> Download PKCS12/PFX Formaat
+                        </a>
+                        <a href="{{ url_for('download_file', filename=bundle_path) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-archive"></i> Download Certificaat Bundle
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h4>Belangrijke Informatie</h4>
+                    <div class="alert alert-warning">
+                        <h5>PKCS12/PFX Wachtwoord</h5>
+                        <p>Als je het PKCS12/PFX formaat hebt gedownload, gebruik dan dit wachtwoord:</p>
+                        <code>{{ password }}</code>
+                    </div>
+                    <div class="alert alert-info">
+                        <h5>Bestandslocaties</h5>
+                        <p>Certificaat: {{ cert_path }}</p>
+                        <p>Private Key: {{ key_path }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{{ url_for('generate_web_cert', domain=domain) }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Genereer Nieuw Certificaat
+                </a>
+                <a href="{{ url_for('domain_certificates', domain=domain) }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Terug naar Domein Overzicht
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

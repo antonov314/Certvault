@@ -1,0 +1,43 @@
+CertVault v2.1
+Release datum: 2024-03-19
+
+Nieuwe features in v2.1:
+- Verbeterd installatie script met Python versie controle
+- Automatische virtual environment setup
+- Duidelijkere installatie instructies
+- Aangepaste naam naar "Self Signed SSL Certificaat Generator"
+
+Core features:
+- Genereer complete Self Signed SSL certificaat hiërarchie
+- Root CA certificaten (10 jaar geldig)
+- Intermediate CA certificaten (5 jaar geldig)
+- Web certificaten (1 jaar geldig)
+- Verschillende download formaten (PEM, DER, CRT, P12/PFX)
+- Automatische certificaat bundel creatie
+- Veilige wachtwoord generatie voor PKCS12/PFX
+- Gebruiksvriendelijke web interface
+
+Features:
+- Multi-domein ondersteuning
+- Status indicators voor Root CA en Intermediate certificaten
+- Details pagina voor bestaande web certificaten
+- Verbeterde certificaat beheer opties (vervangen, downloaden, verwijderen)
+- Moderne UI met Bootstrap en Font Awesome
+- Responsive design voor alle schermformaten
+- Professionele footer met copyright informatie
+- Genereren van Self Signed Root CA certificaten
+- Genereren van Self Signed Intermediate CA certificaten
+- Genereren van Self Signed Web certificaten
+- Verschillende download formaten:
+  * Certificaat Bundle (.cer bestanden voor Root, Intermediate en Web)
+  * PEM formaat
+  * DER formaat
+  * PKCS#12/PFX formaat met aanpasbaar wachtwoord
+- Automatische wachtwoord generatie
+- Moderne web interface met Bootstrap
+- Certificaat keten validatie
+- Veilige sleutellengte (4096 bits)
+- Geldigheidsduur:
+  * Root CA: 10 jaar
+  * Intermediate CA: 5 jaar
+  * Web certificaten: 1 jaar 

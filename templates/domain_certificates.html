@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2>Certificaten voor {{ domain }}</h2>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Terug naar Overzicht
+            </a>
+        </div>
+        <div class="card-body">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Root CA</h5>
+                                {% if root_ca_status.exists %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle"></i> Aangemaakt
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning">
+                                        <i class="fas fa-exclamation-circle"></i> Niet aangemaakt
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <p class="card-text">Het root certificaat is het hoogste niveau in de certificaatketen.</p>
+                            {% if root_ca_status.exists %}
+                                <div class="btn-group">
+                                    <a href="{{ url_for('create_root_ca', domain=domain) }}" class="btn btn-primary">
+                                        <i class="fas fa-sync"></i> Vervang
+                                    </a>
+                                    <a href="{{ url_for('download_file', filename=root_ca_status.path) }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                </div>
+                            {% else %}
+                                <a href="{{ url_for('create_root_ca', domain=domain) }}" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Maak Root CA
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Intermediate</h5>
+                                {% if intermediate_status.exists %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle"></i> Aangemaakt
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning">
+                                        <i class="fas fa-exclamation-circle"></i> Niet aangemaakt
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <p class="card-text">Het intermediate certificaat vormt de schakel tussen root en web certificaten.</p>
+                            {% if intermediate_status.exists %}
+                                <div class="btn-group">
+                                    <a href="{{ url_for('create_intermediate', domain=domain) }}" class="btn btn-primary">
+                                        <i class="fas fa-sync"></i> Vervang
+                                    </a>
+                                    <a href="{{ url_for('download_file', filename=intermediate_status.path) }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                </div>
+                            {% else %}
+                                <a href="{{ url_for('create_intermediate', domain=domain) }}" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Maak Intermediate
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Web Certificaat</h5>
+                            <p class="card-text">Het web certificaat wordt gebruikt voor de beveiliging van je website.</p>
+                            <a href="{{ url_for('generate_web_cert', domain=domain) }}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Genereer Web Certificaat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if web_certs %}
+            <div class="mt-4">
+                <h4>Bestaande Web Certificaten</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Domein</th>
+                                <th>Aangemaakt</th>
+                                <th>Vervalt</th>
+                                <th>Acties</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cert in web_certs %}
+                            <tr>
+                                <td>{{ cert.domain }}</td>
+                                <td>{{ cert.created_at }}</td>
+                                <td>{{ cert.expires_at }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{{ url_for('view_cert', domain=domain, cert_name=cert.domain) }}" class="btn btn-sm btn-outline-info">
+                                            <i class="fas fa-info-circle"></i> Details
+                                        </a>
+                                        <a href="{{ url_for('download_file', filename=cert.cert_path) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-download"></i> Download
+                                        </a>
+                                        <form method="POST" action="{{ url_for('delete_cert', domain=domain, cert_name=cert.domain) }}" class="d-inline" onsubmit="return confirm('Weet je zeker dat je dit certificaat wilt verwijderen?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i> Verwijder
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 
